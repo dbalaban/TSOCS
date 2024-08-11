@@ -1,8 +1,15 @@
 #ifndef FORMULATION_INTERFACE_H
 #define FORMULATION_INTERFACE_H
 
+class FormulationInterface {
+public:
+  virtual ~FormulationInterface() {}
+
+  virtual double* getParameterBlock() = 0;
+};
+
 template <class Derived>
-class AbstractFormulation {
+class AbstractFormulation : public FormulationInterface {
 public:
   AbstractFormulation() {
     params = new double[Derived::N];

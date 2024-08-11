@@ -16,7 +16,7 @@ public:
     delete[] params;
   }
 
-  T* convertBlockImpl(const T* const block, T* newBlock) {
+  static T* convertBlockImpl(const T* const block, T* newBlock) {
     const T TT = block[0]; // total time
     const T p1 = block[1];
     const T p2 = block[2];

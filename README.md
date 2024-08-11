@@ -7,6 +7,9 @@ https://ieeexplore.ieee.org/abstract/document/8594306
 ceres installed with cmake compatibility
 http://ceres-solver.org/installation.html#using-ceres-with-cmake
 
+Eigen3
+https://eigen.tuxfamily.org/dox/index.html
+
 # Citation
 If you use this repo for any publicaiton, please cite using the bibtec code provided below.
 

@@ -8,7 +8,7 @@ public:
   static const int N = 4;
 
   template <typename T>
-  static T* convertBlockImpl(const T* const block, T* newBlock) {
+  static void convertBlockImpl(const T* const block, T* newBlock) {
     const T TT = block[0]; // total time
     const T p1 = block[1];
     const T p2 = block[2];
@@ -49,8 +49,6 @@ public:
     newBlock[2] = b;
     newBlock[3] = r0*cosp1;
     newBlock[4] = r0*sinp1;
-
-    return params;
   }
 
 };

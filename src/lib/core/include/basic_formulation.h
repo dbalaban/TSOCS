@@ -8,7 +8,7 @@ public:
   static const int N = 5;
 
   template <typename T>
-  static T* convertBlockImpl(const T* const block, T* newBlock) {
+  static void convertBlockImpl(const T* const block, T* newBlock) {
     for (int i = 0; i < N; i++) {
       newBlock[i] = block[i];
     }

@@ -3,26 +3,16 @@
 
 #include "abstract_formulation.h"
 
-template <typename T>
-class BasicFormulation : public AbstractFormulation<T, BasicFormulation> {
+class BasicFormulation : public AbstractFormulation<BasicFormulation> {
 public:
-  static int N = 5;
-  BasicFormulation() : AbstractFormulation() {
-    // T, p1, p2, p3, p4
-    params = new double[N];
-  }
+  static const int N = 5;
 
-  ~BasicFormulation() {
-    delete[] params;
-  }
-
+  template <typename T>
   static T* convertBlockImpl(const T* const block, T* newBlock) {
     for (int i = 0; i < N; i++) {
       newBlock[i] = block[i];
     }
   }
-private:
-  double* params;
   
   // Add your class members and methods here
 };

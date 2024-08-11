@@ -3,19 +3,11 @@
 
 #include "abstract_formulation.h"
 
-template <typename T>
-class AngleFormulation : public AbstractFormulation<T> {
+class AngleFormulation : public AbstractFormulation<AngleFormulation> {
 public:
-  static int N = 4;
-  AngleFormulation() : AbstractFormulation<T>() {
-    // T, theta0, theta-tangent, thetaT
-    params = new double[N];
-  }
+  static const int N = 4;
 
-  ~AngleFormulation() {
-    delete[] params;
-  }
-
+  template <typename T>
   static T* convertBlockImpl(const T* const block, T* newBlock) {
     const T TT = block[0]; // total time
     const T p1 = block[1];

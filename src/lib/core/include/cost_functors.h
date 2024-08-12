@@ -2,27 +2,95 @@
 #define COST_FUNCTORS_H
 
 #include <ceres/ceres.h>
-#include <abstract_formulation.h>
+#include <eigen3/Eigen/Core>
+
+#include "abstract_formulation.h"
+#include "state_variables.h"
 
 template <class Formulation>
 class VelocityCostFunctor {
-  VelocityCostFunctor(double vx0, double vy0, double vxT, double vyT) : vx0(vx0), vy0(vy0), vxT(vxT), vyT(vyT) {}
+  VelocityCostFunctor(const Eigen::Vector2d& v0,
+                      const Eigen::Vector2d& vT) : v0(v0), vT(vT) {}
 
-  static ceres::CostFunction* Create(double vx0, double vy0, double vxT, double vyT) {
-    return new ceres::AutoDiffCostFunction<VelocityCostFunctor, 2, Formulation::N>(new VelocityCostFunctor(vx0, vy0, vxT, vyT));
+  static ceres::CostFunction* Create(const Eigen::Vector2d& v0,
+                                     const Eigen::Vector2d& vT) {
+    return new ceres::AutoDiffCostFunction<VelocityCostFunctor, 2, Formulation::N>(new VelocityCostFunctor(v0, vT));
   }
 
   template <typename T>
-  bool operator()(const T* const p1, const T* const p2, const T* const p3, const T* const p4, T* residual) const {
-    residual[0] = T(x) - (p1[0] + p2[0] * T(0) + p3[0] * T(0) + p4[0] * T(0));
-    residual[1] = T(y) - (p1[1] + p2[1] * T(0) + p3[1] * T(0) + p4[1] * T(0));
+  bool operator()(const T* const params, T* residual) const {
+    const T* new_params = Formulation::convertBlock(params);
+    StateVector<T> v = Velocity(new_params, v0);
+    residual[0] = v.x() - vT.x();
+    residual[1] = v.y() - vT.y();
     return true;
   }
 
-  double vx0;
-  double vy0;
-  double vxT;
-  double vyT;
+  Eigen::Vector2d v0;
+  Eigen::Vector2d vT;
+};
+
+template <class Formulation>
+class VelocityParallelCostFunctor {
+  VelocityParallelCostFunctor(const Eigen::Vector2d& v0,
+                              const Eigen::Vector2d& vT) : v0(v0), vT(vT) {}
+
+  static ceres::CostFunction* Create(const Eigen::Vector2d& v0,
+                                     const Eigen::Vector2d& vT) {
+    return new ceres::AutoDiffCostFunction<VelocityParallelCostFunctor, 1, Formulation::N>(new VelocityParallelCostFunctor(v0, vT));
+  }
+
+  template <typename T>
+  bool operator()(const T* const params, T* residual) const {
+    const T* new_params = Formulation::convertBlock(params);
+    StateVector<T> v = Velocity(new_params, v0);
+    T dotprod = v.dot(vT) / (v.norm()*vT.norm());
+    residual[0] = 1-dotprod;
+    return true;
+  }
+
+  Eigen::Vector2d v0;
+  Eigen::Vector2d vT;
+};
+
+template <class Formulation>
+class PositionCostFunctor {
+  PositionCostFunctor(const Eigen::Vector2d& x0,
+                      const Eigen::Vector2d& xT,
+                      const Eigen::Vector2d& v0) : x0(x0), xT(xT), v0(v0) {}
+
+  static ceres::CostFunction* Create(const Eigen::Vector2d& x0,
+                                     const Eigen::Vector2d& xT) {
+    return new ceres::AutoDiffCostFunction<PositionCostFunctor, 2, Formulation::N>(new PositionCostFunctor(x0, xT));
+  }
+
+  template <typename T>
+  bool operator()(const T* const params, T* residual) const {
+    const T* new_params = Formulation::convertBlock(params);
+    StateVector<T> x = Position(new_params, v0, x0);
+    residual[0] = x.x() - xT.x();
+    residual[1] = x.y() - xT.y();
+    return true;
+  }
+
+  Eigen::Vector2d x0;
+  Eigen::Vector2d xT;
+  Eigen::Vector2d v0;
+};
+
+template <class Formulation>
+class TimeCostFunctor {
+  TimeCostFunctor() {}
+
+  static ceres::CostFunction* Create() {
+    return new ceres::AutoDiffCostFunction<TimeCostFunctor, 1, Formulation::N>(new TimeCostFunctor());
+  }
+
+  template <typename T>
+  bool operator()(const T* const params, T* residual) const {
+    residual[0] = Time(params);
+    return true;
+  }
 };
 
 #endif // COST_FUNCTORS_H

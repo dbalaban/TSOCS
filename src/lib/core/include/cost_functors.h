@@ -60,8 +60,9 @@ class PositionCostFunctor {
                       const Eigen::Vector2d& v0) : x0(x0), xT(xT), v0(v0) {}
 
   static ceres::CostFunction* Create(const Eigen::Vector2d& x0,
-                                     const Eigen::Vector2d& xT) {
-    return new ceres::AutoDiffCostFunction<PositionCostFunctor, 2, Formulation::N>(new PositionCostFunctor(x0, xT));
+                                     const Eigen::Vector2d& xT,
+                                     const Eigen::Vector2d& v0) {
+    return new ceres::AutoDiffCostFunction<PositionCostFunctor, 2, Formulation::N>(new PositionCostFunctor(x0, xT, v0));
   }
 
   template <typename T>

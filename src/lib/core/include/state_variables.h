@@ -7,18 +7,18 @@ template <typename T>
 using StateVector = Eigen::Matrix<T, 2, 1>;
 
 template <typename T>
-StateVector Acceleration(const T* params) {
-  return StateVector(params[0]*params[1]+params[3],
+StateVector<T> Acceleration(const T* params) {
+  return StateVector<T>(params[0]*params[1]+params[3],
                     params[0]*params[2]+params[4]).normalized();
 }
 
 template <typename T>
-StateVector Velocity(const T* params, const StateVector& v0) {
+StateVector<T> Velocity(const T* params, const StateVector<T>& v0) {
   T psix = params[0]*params[1]+params[3];
   T psiy = params[0]*params[2]+params[4];
 
-  StateVector p(params[3], params[4]);
-  StateVector q(params[1], params[2]);
+  StateVector<T> p(params[3], params[4]);
+  StateVector<T> q(params[1], params[2]);
 
   T h1 = sqrt(psix*psix + psiy*psiy);
   T h2 = q.norm()*(h1+params[0]*params[0]) + p.dot(q);
@@ -34,16 +34,16 @@ StateVector Velocity(const T* params, const StateVector& v0) {
   T vx = vo.x() + params[1]*f1 + params[2]*f2;
   T vy = vo.y() + params[2]*f1 - params[1]*f2;
 
-  return StateVector(vx, vy);
+  return StateVector<T>(vx, vy);
 }
 
 template <typename T>
-StateVector Position(const T* params, const StateVector& v0, const StateVector& x0) {
+StateVector<T> Position(const T* params, const StateVector<T>& v0, const StateVector<T>& x0) {
   T psix = params[0]*params[1]+params[3];
   T psiy = params[0]*params[2]+params[4];
 
-  StateVector p(params[3], params[4]);
-  StateVector q(params[1], params[2]);
+  StateVector<T> p(params[3], params[4]);
+  StateVector<T> q(params[1], params[2]);
 
   T h1 = sqrt(psix*psix + psiy*psiy);
   T h2 = q.norm()*(h1+params[0]*params[0]) + p.dot(q);
@@ -67,7 +67,7 @@ StateVector Position(const T* params, const StateVector& v0, const StateVector& 
   T x = x0.x() + params[0]*vo.x() + params[1]*f1 + params[2]*f2;
   T y = x0.y() + params[0]*vo.y() + params[2]*f1 - params[1]*f2;
 
-  return StateVector(vx, vy);
+  return StateVector<T>(vx, vy);
 }
 
 template <typename T>

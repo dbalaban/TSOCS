@@ -10,9 +10,9 @@ public:
   template <typename T>
   static void convertBlockImpl(const T* const block, T* newBlock) {
     const T TT = block[0]; // total time
-    const T p1 = block[1];
-    const T p2 = block[2];
-    const T p3 = block[3];
+    const T p1 = block[1]; // starting angle
+    const T p2 = block[2]; // angle at tangent point
+    const T p3 = block[3]; // ending angle
 
     // starting angle
     T cosp1 = cos(p1);
@@ -49,6 +49,24 @@ public:
     newBlock[2] = b;
     newBlock[3] = r0*cosp1;
     newBlock[4] = r0*sinp1;
+  }
+
+  void setInitialGuess(const TOCORBA& problem) {
+    params[0] = getMaxTime(problem);
+    // assume initial acceleration is anti-parallel to initial velocity
+    if (problem.v0.norm() > 0) {
+      params[1] = atan2(-problem.v0.y(), -problem.v0.x());
+    } else { // assume initial acceleration is parallel to displacement vector
+      params[1] = atan2(problem.displacement.y(), problem.displacement.x());
+    }
+    // assume final acceleration is parallel to final velocity
+    if (problem.vT.norm() > 0) {
+      params[3] = atan2(problem.vT.y(), problem.vT.x());
+    } else { // assume final acceleration is parallel to displacement vector
+      params[3] = atan2(problem.displacement.y(), problem.displacement.x());
+    }
+    // assume angle at tangent point is average of initial and final angles
+    params[2] = (params[1] + params[3]) / 2;
   }
 
 };

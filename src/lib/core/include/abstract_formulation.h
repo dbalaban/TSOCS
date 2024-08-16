@@ -1,6 +1,8 @@
 #ifndef FORMULATION_INTERFACE_H
 #define FORMULATION_INTERFACE_H
 
+#include "TOC-ORBA.h"
+
 class FormulationInterface {
 public:
   virtual ~FormulationInterface() {}
@@ -19,6 +21,8 @@ public:
     delete[] params;
   }
 
+  virtual void setInitialGuess(const TOCORBA& problem) = 0;
+
   template <typename T>
   static T* convertBlock(const T* const block) {
     T* newBlock = new T[5];
@@ -30,8 +34,14 @@ public:
     return params;
   }
 
-private:
+protected:
   double* params;
+  static double getMaxTime(const TOCORBA& problem) {
+    return problem.v0.norm() + problem.vT.norm()
+            + 2*sqrt((problem.displacement
+            - (problem.vT.norm()*problem.vT
+            + problem.v0.norm()*problem.v0)/2).norm());
+  }
 };
 
 #endif // FORMULATION_INTERFACE_H

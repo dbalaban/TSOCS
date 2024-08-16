@@ -5,14 +5,6 @@
 #include <random>
 #include <vector>
 
-// three vectors define the problem, the displacement, initial and final velocity
-struct TOCORBA{
-  Eigen::Vector2d displacement;
-  Eigen::Vector2d v0;
-  Eigen::Vector2d vT;
-};
-
-
 class RandomProblemGenerator {
 public:
   // for identifying special cases where one of the vectors is zero

@@ -28,9 +28,9 @@ public:
     if (problem.vT.norm() > 0) {
       params[1] = (problem.vT.x() - params[3])/params[0];
       params[2] = (problem.vT.y() - params[4])/params[0];
-    } else { // assume final acceleration is parallel to displacement vector
-      params[1] = (problem.displacement.x() - params[3])/params[0];
-      params[2] = (problem.displacement.y() - params[4])/params[0];
+    } else { // assume final acceleration is anti-parallel to displacement vector
+      params[1] = (-problem.displacement.x() - params[3])/params[0];
+      params[2] = (-problem.displacement.y() - params[4])/params[0];
     }
   }
   

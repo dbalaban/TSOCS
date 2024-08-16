@@ -62,8 +62,8 @@ public:
     // assume final acceleration is parallel to final velocity
     if (problem.vT.norm() > 0) {
       params[3] = atan2(problem.vT.y(), problem.vT.x());
-    } else { // assume final acceleration is parallel to displacement vector
-      params[3] = atan2(problem.displacement.y(), problem.displacement.x());
+    } else { // assume final acceleration is anti-parallel to displacement vector
+      params[3] = atan2(-problem.displacement.y(), -problem.displacement.x());
     }
     // assume angle at tangent point is average of initial and final angles
     params[2] = (params[1] + params[3]) / 2;

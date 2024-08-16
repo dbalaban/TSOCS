@@ -30,16 +30,6 @@ TOCORBA RandomProblemGenerator::generateProblem(ConstantVector useCase) {
   return problem;
 }
 
-std::vector<TOCORBA> RandomProblemGenerator::generateNProblems(int n, ConstantVector useCase) {
-  TOCORBA problem;
-  std::vector<TOCORBA> problems;
-  for (int i = 0; i < n; ++i) {
-    problem = generateProblem(useCase);
-    problems.push_back(problem);
-  }
-  return problems;
-}
-
 Eigen::Vector2d RandomProblemGenerator::randomDisplacement() {
   // x-axis defined as axis of displacement
   std::uniform_real_distribution<double> distribution(0, maxDisplacement_);

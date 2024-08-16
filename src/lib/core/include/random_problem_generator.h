@@ -29,7 +29,6 @@ public:
                          double epsilon = 1e-6);
 
   TOCORBA generateProblem(ConstantVector useCase = NONE);
-  std::vector<TOCORBA> generateNProblems(int n, ConstantVector useCase = NONE);
 
 private:
   Eigen::Vector2d randomDisplacement();

@@ -31,10 +31,6 @@ class ProblemSolver {
     template <class Formulation>
     bool FastPosition(AbstractFormulation<Formulation>* formulation);
 
-    ceres::Problem problem_;
-    ceres::Solver::Options options_;
-    ceres::Solver::Summary summary_;
-
     TOCORBA problem_;
     double epsilon_;
     ProblemType ptype_;

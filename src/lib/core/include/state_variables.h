@@ -31,8 +31,8 @@ StateVector<T> Velocity(const T* params, const StateVector<T>& v0) {
   T f1 = (h1-p.norm())/q.squaredNorm();
   T f2 = detpq*log(gamma)/q3;
 
-  T vx = vo.x() + params[1]*f1 + params[2]*f2;
-  T vy = vo.y() + params[2]*f1 - params[1]*f2;
+  T vx = v0.x() + params[1]*f1 + params[2]*f2;
+  T vy = v0.y() + params[2]*f1 - params[1]*f2;
 
   return StateVector<T>(vx, vy);
 }
@@ -60,14 +60,14 @@ StateVector<T> Position(const T* params, const StateVector<T>& v0, const StateVe
   T detpq = p.x()*q.y()-p.y()*q.x();
 
   T f1 = (h1*(q1*pdotq + 2*params[0]*q3) + pcrossq*log(gamma) 
-              - p.norm()*(p1*pdotq + 2*params[0]*q3))/(2*q5);
+              - p.norm()*(q1*pdotq + 2*params[0]*q3))/(2*q5);
   T f2 = detpq*(log(gamma)*(params[0] + pdotq/q2)
                   -(h1-p.norm())/q1)/q3;
 
-  T x = x0.x() + params[0]*vo.x() + params[1]*f1 + params[2]*f2;
-  T y = x0.y() + params[0]*vo.y() + params[2]*f1 - params[1]*f2;
+  T x = x0.x() + params[0]*v0.x() + params[1]*f1 + params[2]*f2;
+  T y = x0.y() + params[0]*v0.y() + params[2]*f1 - params[1]*f2;
 
-  return StateVector<T>(vx, vy);
+  return StateVector<T>(x, y);
 }
 
 template <typename T>

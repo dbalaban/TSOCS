@@ -53,7 +53,7 @@ bool ProblemSolver::Phase1(AbstractFormulation<Formulation>* formulation) {
   // free memory
   delete displacement;
   delete parallel_velocity;
-  if (problem.vT.norm() > epsilon_ && cost > epsilon_) {
+  if (problem_.vT.norm() > epsilon_ && cost > epsilon_) {
     return false;
   }
 
@@ -73,7 +73,7 @@ bool ProblemSolver::Phase2(AbstractFormulation<Formulation>* formulation) {
   ceres::CostFunction* velocity =
       VelocityCostFunctor<Formulation>::Create(problem_.v0,
                                               problem_.vT);
-  problem.AddResidualBlock(velocity, NULL, Fformulation->params);
+  problem.AddResidualBlock(velocity, NULL, formulation->params);
 
   ceres::Solver::Options options;
   options.linear_solver_type = ceres::DENSE_QR;

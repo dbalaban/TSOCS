@@ -5,6 +5,8 @@
 #include <random>
 #include <vector>
 
+#include "TOC-ORBA.h"
+
 class RandomProblemGenerator {
 public:
   // for identifying special cases where one of the vectors is zero

@@ -1,11 +1,11 @@
 #ifndef RANDOM_PROBLEM_GENERATOR_H
 #define RANDOM_PROBLEM_GENERATOR_H
+#pragma once
 
+#include "TOC-ORBA.h"
 #include <Eigen/Dense>
 #include <random>
 #include <vector>
-
-#include "TOC-ORBA.h"
 
 class RandomProblemGenerator {
 public:
@@ -17,12 +17,14 @@ public:
     NONE
   };
 
-  RandomProblemGenerator(double maxDisplacement,
-                         double maxVelocity,
+  // so i use this to generate a "problem"? 
+  RandomProblemGenerator(double maxDisplacement,  // what units? use 3
+                         double maxVelocity,      // use 7
                          unsigned int seed = 0,
                          double epsilon = 1e-6);
 
-  TOCORBA generateProblem(ConstantVector useCase = NONE);
+  // TOCORBA is the problem instance?
+  TOCORBA generateProblem(ConstantVector useCase = NONE); // use default
 
 private:
   Eigen::Vector2d randomDisplacement();

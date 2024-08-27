@@ -1,5 +1,6 @@
 #ifndef CORE_TOC_ORBA_H
 #define CORE_TOC_ORBA_H
+#pragma once
 
 #include <Eigen/Core>
 
@@ -12,3 +13,4 @@ struct TOCORBA{
 };
 
 #endif  // CORE_TOC_ORBA_H
+

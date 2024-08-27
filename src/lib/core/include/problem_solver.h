@@ -1,6 +1,6 @@
 #ifndef CORE_PROBLEM_SOLVER_H
 #define CORE_PROBLEM_SOLVER_H
-
+#pragma once
 #include <ceres/ceres.h>
 
 #include "abstract_formulation.h"
@@ -19,7 +19,9 @@ class ProblemSolver {
     ProblemSolver(const TOCORBA& problem, double epsilon = 1e-6);
 
     template <class Formulation>
-    bool Solve(AbstractFormulation<Formulation>* formulation, ProblemType ptype = TSOCS);
+     // what's the output? formulation is input/output
+     // where do i get the input formulation? Use default ctor for the formulation instance
+     bool Solve(AbstractFormulation<Formulation>* formulation, ProblemType ptype = TSOCS); // use angle_formulation or basic_formulation
 
   private:
     template <class Formulation>

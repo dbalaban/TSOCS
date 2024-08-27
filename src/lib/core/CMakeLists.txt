@@ -10,12 +10,16 @@ add_library(${PROJECT_NAME} SHARED
   src/random_problem_generator.cpp
 )
 
-target_link_libraries(${PROJECT_NAME}
-  ${CERES_LIBRARIES}
-)
-
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CERES_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
+)
+
+add_executable(simple_test
+  src/TestMain.cpp
+)
+
+target_link_libraries(simple_test
+  ${CERES_LIBRARIES}
 )

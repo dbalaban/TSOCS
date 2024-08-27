@@ -1,6 +1,6 @@
 #ifndef BASIC_FORMULATION_H
 #define BASIC_FORMULATION_H
-
+#pragma once
 #include "abstract_formulation.h"
 
 class BasicFormulation : public AbstractFormulation<BasicFormulation> {

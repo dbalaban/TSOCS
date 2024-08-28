@@ -17,8 +17,8 @@ const int ITERATIONS = 100;
 
 int main(int argc, char* argv[])
 {
-    long successes = 0;
-    long failures = 0;
+    long bsuccesses = 0, asuccesses = 0;
+    long bfailures = 0,  afailures = 0;
 
     RandomProblemGenerator pgen(3,9);
 
@@ -27,17 +27,22 @@ int main(int argc, char* argv[])
         TOCORBA problem = pgen.generateProblem();
         ProblemSolver *solver = new ProblemSolver(problem);
 
-        AngleFormulation *form = new AngleFormulation();
-        bool ok = solver->Solve(form);
-
+        AngleFormulation aform;
+        bool ok = solver->Solve(static_cast<AbstractFormulation<AngleFormulation>*>(&aform));
         if (ok)
-            successes++;
-        else failures++;
+            asuccesses++;
+        else afailures++;
 
-        delete form;
+        BasicFormulation bform;
+        ok = solver->Solve(static_cast<AbstractFormulation<BasicFormulation>*>(&bform));
+        if (ok)
+            bsuccesses++;
+        else bfailures++;
+
         delete solver;
     }   
 
-    std::cout << "Results of " << ITERATIONS << " iterations: " << successes << " success, " << failures << " failed";
+    std::cout << "Results of " << ITERATIONS << " iterations (BasicFormulations): " << bsuccesses << " success, " << bfailures << " failed";
+    std::cout << "Results of " << ITERATIONS << " iterations (AngleFormulations): " << asuccesses << " success, " << afailures << " failed";
     
 }

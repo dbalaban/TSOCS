@@ -34,7 +34,7 @@ public:
     return params;
   }
 
-protected:
+//protected:
   double* params;
   static double getMaxTime(const TOCORBA& problem) {
     return problem.v0.norm() + problem.vT.norm()

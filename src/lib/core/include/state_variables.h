@@ -56,11 +56,11 @@ StateVector<T> Position(const T* params, const StateVector<T>& v0, const StateVe
   T q5 = q3*q2;
 
   T pdotq = p.dot(q);
-  T pcrossq = p.cross(q).squaredNorm();
   T detpq = p.x()*q.y()-p.y()*q.x();
+  T pcrossq = detpq*detpq;
 
-  T f1 = (h1*(q1*pdotq + 2*params[0]*q3) + pcrossq*log(gamma) 
-              - p.norm()*(q1*pdotq + 2*params[0]*q3))/(2*q5);
+  T f1 = (h1*(q1*pdotq + T(2)*params[0]*q3) + pcrossq*log(gamma) 
+              - p.norm()*(q1*pdotq + T(2)*params[0]*q3))/(T(2)*q5);
   T f2 = detpq*(log(gamma)*(params[0] + pdotq/q2)
                   -(h1-p.norm())/q1)/q3;
 

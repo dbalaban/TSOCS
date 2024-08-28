@@ -9,6 +9,7 @@
 
 template <class Formulation>
 class VelocityCostFunctor {
+public:
   VelocityCostFunctor(const Eigen::Vector2d& v0,
                       const Eigen::Vector2d& vT) : v0(v0), vT(vT) {}
 
@@ -20,7 +21,8 @@ class VelocityCostFunctor {
   template <typename T>
   bool operator()(const T* const params, T* residual) const {
     const T* new_params = Formulation::convertBlock(params);
-    StateVector<T> v = Velocity(new_params, v0);
+    StateVector<T> v0_cast = v0.cast<T>();
+    StateVector<T> v = Velocity(new_params, v0_cast);
     residual[0] = v.x() - vT.x();
     residual[1] = v.y() - vT.y();
     return true;
@@ -32,6 +34,7 @@ class VelocityCostFunctor {
 
 template <class Formulation>
 class VelocityParallelCostFunctor {
+  public:
   VelocityParallelCostFunctor(const Eigen::Vector2d& v0,
                               const Eigen::Vector2d& vT) : v0(v0), vT(vT) {}
 
@@ -43,9 +46,10 @@ class VelocityParallelCostFunctor {
   template <typename T>
   bool operator()(const T* const params, T* residual) const {
     const T* new_params = Formulation::convertBlock(params);
-    StateVector<T> v = Velocity(new_params, v0);
+    StateVector<T> v0_cast = v0.cast<T>();
+    StateVector<T> v = Velocity(new_params, v0_cast);
     T dotprod = v.dot(vT) / (v.norm()*vT.norm());
-    residual[0] = 1-dotprod;
+    residual[0] = T(1)-dotprod;
     return true;
   }
 
@@ -55,6 +59,7 @@ class VelocityParallelCostFunctor {
 
 template <class Formulation>
 class PositionCostFunctor {
+  public:
   PositionCostFunctor(const Eigen::Vector2d& x0,
                       const Eigen::Vector2d& xT,
                       const Eigen::Vector2d& v0) : x0(x0), xT(xT), v0(v0) {}
@@ -68,7 +73,9 @@ class PositionCostFunctor {
   template <typename T>
   bool operator()(const T* const params, T* residual) const {
     const T* new_params = Formulation::convertBlock(params);
-    StateVector<T> x = Position(new_params, v0, x0);
+    StateVector<T> v0_cast = v0.cast<T>();
+    StateVector<T> x0_cast = x0.cast<T>();
+    StateVector<T> x = Position(new_params, v0_cast, x0_cast);
     residual[0] = x.x() - xT.x();
     residual[1] = x.y() - xT.y();
     return true;
@@ -81,6 +88,7 @@ class PositionCostFunctor {
 
 template <class Formulation>
 class TimeCostFunctor {
+  public:
   TimeCostFunctor() {}
 
   static ceres::CostFunction* Create() {

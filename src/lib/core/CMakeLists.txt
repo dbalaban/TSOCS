@@ -21,5 +21,6 @@ add_executable(simple_test
 )
 
 target_link_libraries(simple_test
-  ${CERES_LIBRARIES}
+${PROJECT_NAME}
+${CERES_LIBRARIES}
 )

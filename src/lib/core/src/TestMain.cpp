@@ -28,13 +28,13 @@ int main(int argc, char* argv[])
         ProblemSolver *solver = new ProblemSolver(problem);
 
         AngleFormulation aform;
-        bool ok = solver->Solve(static_cast<AbstractFormulation<AngleFormulation>*>(&aform));
+        bool ok = solver->Solve((AbstractFormulation<AngleFormulation>*)(&aform));
         if (ok)
             asuccesses++;
         else afailures++;
 
         BasicFormulation bform;
-        ok = solver->Solve(static_cast<AbstractFormulation<BasicFormulation>*>(&bform));
+        ok = solver->Solve((AbstractFormulation<BasicFormulation>*)(&bform));
         if (ok)
             bsuccesses++;
         else bfailures++;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
         delete solver;
     }   
 
-    std::cout << "Results of " << ITERATIONS << " iterations (BasicFormulations): " << bsuccesses << " success, " << bfailures << " failed";
-    std::cout << "Results of " << ITERATIONS << " iterations (AngleFormulations): " << asuccesses << " success, " << afailures << " failed";
+    std::cout << std::endl << "Results of " << ITERATIONS << " iterations (BasicFormulations): " << bsuccesses << " success, " << bfailures << " failed" << std::endl;
+    std::cout << "Results of " << ITERATIONS << " iterations (AngleFormulations): " << asuccesses << " success, " << afailures << " failed" << std::endl;
     
 }

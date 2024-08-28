@@ -64,14 +64,14 @@ class ProblemSolver {
       } catch (const std::exception& e) {
         std::cerr << "Ceres error: " << e.what() << std::endl;
         // free memory
-        delete displacement;
-        delete parallel_velocity;
+        // delete displacement;
+        // delete parallel_velocity;
         return false;
       }
       double cost = summary.final_cost;
       // free memory
-      delete displacement;
-      delete parallel_velocity;
+      // delete displacement;
+      // delete parallel_velocity;
       if (problem_.vT.norm() > epsilon_ && cost > epsilon_) {
         return false;
       }
@@ -103,13 +103,13 @@ class ProblemSolver {
       } catch (const std::exception& e) {
         std::cerr << "Ceres error: " << e.what() << std::endl;
         // free memory
-        delete velocity;
-        delete displacement;
+        // delete velocity;
+        // delete displacement;
         return false;
       }
       // free memory
-      delete velocity;
-      delete displacement;
+      // delete velocity;
+      // delete displacement;
       double cost = summary.final_cost;
       if (cost > epsilon_) {
         return false;
@@ -149,13 +149,13 @@ class ProblemSolver {
       } catch (const std::exception& e) {
         std::cerr << "Ceres error: " << e.what() << std::endl;
         // free memory
-        delete displacement;
-        delete total_time;
+        // delete displacement;
+        // delete total_time;
         return false;
       }
       // free memory
-      delete displacement;
-      delete total_time;
+      // delete displacement;
+      // delete total_time;
       double cost = summary.final_cost;
       if (cost > epsilon_) {
         return false;

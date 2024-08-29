@@ -15,14 +15,14 @@ public:
 
   static ceres::CostFunction* Create(const Eigen::Vector2d& v0,
                                      const Eigen::Vector2d& vT) {
-    return new ceres::AutoDiffCostFunction<VelocityCostFunctor, 2, Formulation::N>(new VelocityCostFunctor(v0, vT));
+    return new ceres::AutoDiffCostFunction<VelocityCostFunctor, 2, 1, Formulation::N>(new VelocityCostFunctor(v0, vT));
   }
 
   template <typename T>
-  bool operator()(const T* const params, T* residual) const {
-    const T* new_params = Formulation::convertBlock(params);
+  bool operator()(const T* const time, const T* const params, T* residual) const {
+    const T* new_params = Formulation::convertBlock(time, params);
     StateVector<T> v0_cast = v0.cast<T>();
-    StateVector<T> v = Velocity(new_params, v0_cast);
+    StateVector<T> v = Velocity(time, new_params, v0_cast);
     residual[0] = v.x() - vT.x();
     residual[1] = v.y() - vT.y();
     return true;
@@ -40,14 +40,14 @@ class VelocityParallelCostFunctor {
 
   static ceres::CostFunction* Create(const Eigen::Vector2d& v0,
                                      const Eigen::Vector2d& vT) {
-    return new ceres::AutoDiffCostFunction<VelocityParallelCostFunctor, 1, Formulation::N>(new VelocityParallelCostFunctor(v0, vT));
+    return new ceres::AutoDiffCostFunction<VelocityParallelCostFunctor, 1, 1, Formulation::N>(new VelocityParallelCostFunctor(v0, vT));
   }
 
   template <typename T>
-  bool operator()(const T* const params, T* residual) const {
-    const T* new_params = Formulation::convertBlock(params);
+  bool operator()(const T* const time, const T* const params, T* residual) const {
+    const T* new_params = Formulation::convertBlock(time, params);
     StateVector<T> v0_cast = v0.cast<T>();
-    StateVector<T> v = Velocity(new_params, v0_cast);
+    StateVector<T> v = Velocity(time, new_params, v0_cast);
     T dotprod = v.dot(vT) / (v.norm()*vT.norm());
     residual[0] = T(1)-dotprod;
     return true;
@@ -67,15 +67,15 @@ class PositionCostFunctor {
   static ceres::CostFunction* Create(const Eigen::Vector2d& x0,
                                      const Eigen::Vector2d& xT,
                                      const Eigen::Vector2d& v0) {
-    return new ceres::AutoDiffCostFunction<PositionCostFunctor, 2, Formulation::N>(new PositionCostFunctor(x0, xT, v0));
+    return new ceres::AutoDiffCostFunction<PositionCostFunctor, 2, 1, Formulation::N>(new PositionCostFunctor(x0, xT, v0));
   }
 
   template <typename T>
-  bool operator()(const T* const params, T* residual) const {
-    const T* new_params = Formulation::convertBlock(params);
+  bool operator()(const T* const time, const T* const params, T* residual) const {
+    const T* new_params = Formulation::convertBlock(time, params);
     StateVector<T> v0_cast = v0.cast<T>();
     StateVector<T> x0_cast = x0.cast<T>();
-    StateVector<T> x = Position(new_params, v0_cast, x0_cast);
+    StateVector<T> x = Position(time, new_params, v0_cast, x0_cast);
     residual[0] = x.x() - xT.x();
     residual[1] = x.y() - xT.y();
     return true;
@@ -92,12 +92,12 @@ class TimeCostFunctor {
   TimeCostFunctor() {}
 
   static ceres::CostFunction* Create() {
-    return new ceres::AutoDiffCostFunction<TimeCostFunctor, 1, Formulation::N>(new TimeCostFunctor());
+    return new ceres::AutoDiffCostFunction<TimeCostFunctor, 1, 1, Formulation::N>(new TimeCostFunctor());
   }
 
   template <typename T>
-  bool operator()(const T* const params, T* residual) const {
-    residual[0] = Time(params);
+  bool operator()(const T* const time, const T* const params, T* residual) const {
+    residual[0] = Time(time, params);
     return true;
   }
 };

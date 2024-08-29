@@ -13,33 +13,31 @@
 #include <stdio.h>
 #include <iostream>
 
-const int ITERATIONS = 100;
+const int ITERATIONS = 10000;
 
 int main(int argc, char* argv[])
 {
     long bsuccesses = 0, asuccesses = 0;
     long bfailures = 0,  afailures = 0;
 
-    RandomProblemGenerator pgen(3,9);
+    RandomProblemGenerator pgen(3,7);
 
     for (long i = 0; i < ITERATIONS; i++)
     {
         TOCORBA problem = pgen.generateProblem();
-        ProblemSolver *solver = new ProblemSolver(problem);
+        ProblemSolver solver(problem);
 
         AngleFormulation aform;
-        bool ok = solver->Solve((AbstractFormulation<AngleFormulation>*)(&aform));
+        bool ok = solver.Solve((AbstractFormulation<AngleFormulation>*)(&aform), ProblemType::TSOCStype);
         if (ok)
             asuccesses++;
         else afailures++;
 
         BasicFormulation bform;
-        ok = solver->Solve((AbstractFormulation<BasicFormulation>*)(&bform));
+        ok = solver.Solve((AbstractFormulation<BasicFormulation>*)(&bform), ProblemType::TSOCStype);
         if (ok)
             bsuccesses++;
         else bfailures++;
-
-        delete solver;
     }   
 
     std::cout << std::endl << "Results of " << ITERATIONS << " iterations (BasicFormulations): " << bsuccesses << " success, " << bfailures << " failed" << std::endl;

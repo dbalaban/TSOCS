@@ -3,6 +3,8 @@
 
 #include "TOC-ORBA.h"
 
+#include <iostream>
+
 class FormulationInterface {
 public:
   virtual ~FormulationInterface() {}
@@ -13,8 +15,10 @@ public:
 template <class Derived>
 class AbstractFormulation : public FormulationInterface {
 public:
+  static const int N = Derived::N;
   AbstractFormulation() {
-    params = new double[Derived::N];
+    params = new double[N];
+    time = new double[1];
   }
 
   virtual ~AbstractFormulation() {
@@ -24,9 +28,9 @@ public:
   virtual void setInitialGuess(const TOCORBA& problem) = 0;
 
   template <typename T>
-  static T* convertBlock(const T* const block) {
-    T* newBlock = new T[5];
-    Derived::convertBlockImpl(block, newBlock);
+  static T* convertBlock(const T* TT, const T* const block) {
+    T* newBlock = new T[4];
+    Derived::convertBlockImpl(TT, block, newBlock);
     return newBlock;
   }
 
@@ -34,8 +38,22 @@ public:
     return params;
   }
 
+  double* getParameterTime() {
+    return time;
+  }
+
+  void printParams() {
+    std::cout << time[0] << " ";
+    for (int i = 0; i < N; i++) {
+      std::cout << params[i] << " ";
+    }
+    std::cout << std::endl;
+  }
+
 //protected:
   double* params;
+  double* time;
+
   static double getMaxTime(const TOCORBA& problem) {
     return problem.v0.norm() + problem.vT.norm()
             + 2*sqrt((problem.displacement

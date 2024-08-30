@@ -29,7 +29,7 @@ StateVector<T> Velocity(const T* time, const T* params, const StateVector<T>& v0
   T h3 = p.norm()*q1 + p.dot(q);
 
   T gamma = abs(h2/h3);
-  if (ceres::IsNaN(gamma) || ceres::IsInfinite(gamma) || gamma == T(0)) {
+  if (ceres::isnan(gamma) || ceres::isinf(gamma) || gamma == T(0)) {
     gamma = T(1.0);
   }
   T detpq = p.x()*q.y()-p.y()*q.x();
@@ -40,7 +40,7 @@ StateVector<T> Velocity(const T* time, const T* params, const StateVector<T>& v0
   T vx = v0.x() + params[0]*f1 + params[1]*f2;
   T vy = v0.y() + params[1]*f1 - params[0]*f2;
 
-  if (ceres::IsNaN(vx) || ceres::IsNaN(vy)) {
+  if (ceres::isnan(vx) || ceres::isnan(vy)) {
     std::cout << "NaN in velocity" << std::endl;
     std::cout << "time: " << time[0] << std::endl;
     std::cout << "params: " << params[0] << " " << params[1] << " " << params[2] << " " << params[3] << " " << params[4] << std::endl;
@@ -79,7 +79,7 @@ StateVector<T> Position(const T* time, const T* params, const StateVector<T>& v0
   T h3 = p.norm()*q1 + pdotq;
 
   T gamma = abs(h2/h3);
-  if (ceres::IsNaN(gamma) || ceres::IsInfinite(gamma) || gamma == T(0)) {
+  if (ceres::isnan(gamma) || ceres::isinf(gamma) || gamma == T(0)) {
     gamma = T(1.0);
   }
 
@@ -94,7 +94,7 @@ StateVector<T> Position(const T* time, const T* params, const StateVector<T>& v0
   T x = x0.x() + time[0]*v0.x() + params[0]*f1 + params[1]*f2;
   T y = x0.y() + time[0]*v0.y() + params[1]*f1 - params[0]*f2;
 
-  if (ceres::IsNaN(x) || ceres::IsNaN(y)) {
+  if (ceres::isnan(x) || ceres::isnan(y)) {
     std::cout << "NaN in position" << std::endl;
     std::cout << "time: " << time[0] << std::endl;
     std::cout << "params: " << params[0] << " " << params[1] << " " << params[2] << " " << params[3] << " " << params[4] << std::endl;
